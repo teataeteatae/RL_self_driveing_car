@@ -1,0 +1,33 @@
+[Ll]ibrary/
+[Tt]emp/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Oo]bj/
+[Mm]emoryCaptures/
+UserSettings/
+
+# VS / Rider
+.vs/
+*.csproj
+*.sln
+*.user
+*.unityproj
+*.suo
+*.tmp
+*.userprefs
+*.pidb
+*.booproj
+
+# Crash reports
+sysinfo.txt
+
+# Generated files
+ExportedObj/
+
+# Packages
+Packages/manifest.json
+Packages/packages-lock.json
+
+# Asset Store
+Assets/AssetStoreTools*
