@@ -1,0 +1,29 @@
+{
+    "CarBrain": {
+        "checkpoints": [
+            {
+                "steps": 31538,
+                "file_path": "results\\CarRun10\\CarBrain\\CarBrain-31538.onnx",
+                "reward": -0.600778270851482,
+                "creation_time": 1763565725.1059968,
+                "auxillary_file_paths": [
+                    "results\\CarRun10\\CarBrain\\CarBrain-31538.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 31538,
+            "file_path": "results\\CarRun10\\CarBrain.onnx",
+            "reward": -0.600778270851482,
+            "creation_time": 1763565725.1059968,
+            "auxillary_file_paths": [
+                "results\\CarRun10\\CarBrain\\CarBrain-31538.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.2.0.dev0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

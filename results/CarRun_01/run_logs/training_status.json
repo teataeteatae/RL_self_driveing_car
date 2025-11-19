@@ -2,22 +2,22 @@
     "CarBrain": {
         "checkpoints": [
             {
-                "steps": 7168,
-                "file_path": "results\\CarRun_01\\CarBrain\\CarBrain-7168.onnx",
+                "steps": 9344,
+                "file_path": "results\\CarRun_01\\CarBrain\\CarBrain-9344.onnx",
                 "reward": null,
-                "creation_time": 1763415722.7172964,
+                "creation_time": 1763439961.0486789,
                 "auxillary_file_paths": [
-                    "results\\CarRun_01\\CarBrain\\CarBrain-7168.pt"
+                    "results\\CarRun_01\\CarBrain\\CarBrain-9344.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 7168,
+            "steps": 9344,
             "file_path": "results\\CarRun_01\\CarBrain.onnx",
             "reward": null,
-            "creation_time": 1763415722.7172964,
+            "creation_time": 1763439961.0486789,
             "auxillary_file_paths": [
-                "results\\CarRun_01\\CarBrain\\CarBrain-7168.pt"
+                "results\\CarRun_01\\CarBrain\\CarBrain-9344.pt"
             ]
         }
     },

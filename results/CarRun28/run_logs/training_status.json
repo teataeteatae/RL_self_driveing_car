@@ -1,0 +1,65 @@
+{
+    "CarBrain": {
+        "checkpoints": [
+            {
+                "steps": 1499979,
+                "file_path": "results\\CarRun28\\CarBrain\\CarBrain-1499979.onnx",
+                "reward": 127.61582578369912,
+                "creation_time": 1763573187.3761258,
+                "auxillary_file_paths": [
+                    "results\\CarRun28\\CarBrain\\CarBrain-1499979.pt"
+                ]
+            },
+            {
+                "steps": 1999937,
+                "file_path": "results\\CarRun28\\CarBrain\\CarBrain-1999937.onnx",
+                "reward": 113.77846233661359,
+                "creation_time": 1763573337.0954733,
+                "auxillary_file_paths": [
+                    "results\\CarRun28\\CarBrain\\CarBrain-1999937.pt"
+                ]
+            },
+            {
+                "steps": 2499994,
+                "file_path": "results\\CarRun28\\CarBrain\\CarBrain-2499994.onnx",
+                "reward": 150.34787804707065,
+                "creation_time": 1763573488.5003798,
+                "auxillary_file_paths": [
+                    "results\\CarRun28\\CarBrain\\CarBrain-2499994.pt"
+                ]
+            },
+            {
+                "steps": 2999939,
+                "file_path": "results\\CarRun28\\CarBrain\\CarBrain-2999939.onnx",
+                "reward": 132.65333206589156,
+                "creation_time": 1763573652.2793422,
+                "auxillary_file_paths": [
+                    "results\\CarRun28\\CarBrain\\CarBrain-2999939.pt"
+                ]
+            },
+            {
+                "steps": 3000055,
+                "file_path": "results\\CarRun28\\CarBrain\\CarBrain-3000055.onnx",
+                "reward": 136.16524405228463,
+                "creation_time": 1763573652.3201609,
+                "auxillary_file_paths": [
+                    "results\\CarRun28\\CarBrain\\CarBrain-3000055.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 3000055,
+            "file_path": "results\\CarRun28\\CarBrain.onnx",
+            "reward": 136.16524405228463,
+            "creation_time": 1763573652.3201609,
+            "auxillary_file_paths": [
+                "results\\CarRun28\\CarBrain\\CarBrain-3000055.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.2.0.dev0",
+        "torch_version": "2.2.2+cu121"
+    }
+}
