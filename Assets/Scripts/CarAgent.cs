@@ -10,7 +10,7 @@ public class CarAgent : Agent
     public Transform spawnPoint;
     public Transform trackCenter;
 
-    Rigidbody rb;
+    private Rigidbody rb;
 
     // 연석/중앙선/역주행 패널티 세기
     [Header("Rewards / Penalties")]
@@ -62,9 +62,10 @@ public class CarAgent : Agent
     {
         if (car == null || rb == null)
         {
-            sensor.AddObservation(0f);
-            sensor.AddObservation(0f);
-            sensor.AddObservation(Vector3.zero);
+            sensor.AddObservation(0f);            // speed
+            sensor.AddObservation(0f);            // dist
+            sensor.AddObservation(Vector3.zero);  // forward
+            sensor.AddObservation(0f);            // y
             return;
         }
 
@@ -115,83 +116,87 @@ public class CarAgent : Agent
             car.GoReverse();
         else
             car.ThrottleOff();
-// =============================
-// 🔹 보상 설계
-// =============================
 
-float forwardSpeed = Vector3.Dot(rb.velocity, car.transform.forward); // 전방 속도
-float speedMag = rb.velocity.magnitude;
+        // =============================
+        // 🔹 보상 설계
+        // =============================
 
-// 0) 매 스텝 시간 패널티 (괜히 오래 버티는 전략 방지)
-AddReward(-0.0005f);
+        float forwardSpeed = Vector3.Dot(rb.velocity, car.transform.forward);
+        float speedMag = rb.velocity.magnitude;
 
-// 1) 앞으로 가면 +보상
-//    forwardSpeed를 0~1 사이로 대략 정규화해서 사용
-float normForward = Mathf.Clamp01(forwardSpeed / 10f);
-AddReward(0.2f * normForward);   // 앞으로 가는 게 핵심 리워드
+        // 0) 매 스텝 시간 패널티 (괜히 오래 버티는 전략 방지)
+        AddReward(-0.0005f);
 
-// 2) 도로 중심에 가까울수록 +보상
-if (trackCenter != null)
-{
-    float dist = Vector3.Distance(car.transform.position, trackCenter.position);
-    if (dist < 2.0f) // 일정 범위 안일 때만
-    {
-        float centerReward = 1f - (dist / 2f);
-        AddReward(0.002f * centerReward);
-    }
-}
+        // 1) 앞으로 가면 +보상 (정면 진행 성분 기준)
+        float normForward = Mathf.Clamp01(forwardSpeed / 10f);
+        AddReward(0.2f * normForward);
 
-// 3) 너무 느리면 패널티 + idle 카운트 증가
-if (speedMag < 0.5f)
-{
-    // 가만히 있으면 더 손해
-    AddReward(-0.002f);
-    idleSteps++;
-}
-else
-{
-    idleSteps = 0;
-}
+        // 2) 도로 중심에 가까울수록 + 보상
+        if (trackCenter != null)
+        {
+            float dist = Vector3.Distance(car.transform.position, trackCenter.position);
+            if (dist < 2.0f)
+            {
+                float centerReward = 1f - (dist / 2f); // 0 ~ 1
+                AddReward(0.002f * centerReward);
+            }
+        }
 
-// 너무 오래 안 움직이면 강제 종료
-if (idleSteps > maxIdleSteps)
-{
-    AddReward(-0.5f);  // "시간만 끈 실패"
-    EndEpisode();
-    return;
-}
+        // 3) 너무 느리면 패널티 + idle 처리
+        if (speedMag < 0.5f)
+        {
+            AddReward(-0.002f); // 가만히 있으면 손해
+            idleSteps++;
+        }
+        else
+        {
+            idleSteps = 0;
+        }
 
-// 4) 🚫 역주행(뒤로 가기) 소프트 패널티
-if (forwardSpeed < -0.1f)
-{
-    // 뒤로 갈수록 약간씩 손해 (하지만 즉사 아님)
-    float normBackward = Mathf.Clamp01(-forwardSpeed / 10f);
-    AddReward(-0.01f * normBackward);
-}
-}
+        // 너무 오래 안 움직이면 강제 종료
+        if (idleSteps > maxIdleSteps)
+        {
+            AddReward(-0.5f);
+            EndEpisode();
+            return;
+        }
 
-// ==================================================================
-// 🚧 충돌 처리 (소프트 정책)
-// ==================================================================
-private void OnCollisionEnter(Collision collision)
-{
-    // 🔸 오른쪽 연석/보도: 꽤 큰 패널티, 하지만 에피소드 유지
-    if (collision.collider.CompareTag("RightLine"))
-    {
-        AddReward(-0.5f);   // 한 번만 밟아도 많이 아픔
-        return;
+        // 4) 역주행(뒤로 가기) 패널티
+        if (forwardSpeed < -0.1f)
+        {
+            float normBackward = Mathf.Clamp01(-forwardSpeed / 10f);
+            AddReward(backwardPenaltyScale * normBackward); // backwardPenaltyScale는 음수
+        }
     }
 
-    // 🔸 중앙선: 연석보다 조금 약한 패널티
-    if (collision.collider.CompareTag("CenterLine"))
+    // 🔻 충돌 처리 (한 번만 정의!)
+    private void OnCollisionEnter(Collision collision)
     {
-        AddReward(-0.3f);   // 중앙선 살짝 밟는 것도 손해
-        return;
+        if (collision.collider.CompareTag("RightLine"))
+        {
+            AddReward(-0.5f);
+            // 필요하면 EndEpisode(); 추가
+            return;
+        }
+
+        if (collision.collider.CompareTag("CenterLine"))
+        {
+            AddReward(-0.3f);
+            // 필요하면 EndEpisode(); 추가
+            return;
+        }
     }
 
-    
-}
-
+    // 🔻 중앙 콜라이더 트리거 리워드
+    // Collider_Center 태그 가진 트리거 안에 있을 때 매 스텝마다 +리워드
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Collider_Center"))
+        {
+            // 중앙에 잘 붙어서 달릴수록 이득
+            AddReward(0.005f);
+        }
+    }
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {

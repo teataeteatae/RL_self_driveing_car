@@ -1,12 +1,12 @@
 behaviors:
-  CarBrain:  
+  CarBrain:
     trainer_type: ppo
 
     hyperparameters:
-      batch_size: 2048  
-      buffer_size: 40960  
+      batch_size: 2048
+      buffer_size: 40960
       learning_rate: 1.5e-4
-      beta: 1.5e-3 
+      beta: 1.5e-3
       epsilon: 0.2
       lambd: 0.95
       num_epoch: 3
@@ -17,13 +17,12 @@ behaviors:
       hidden_units: 128
       num_layers: 2
       vis_encode_type: simple
-    
 
     reward_signals:
       extrinsic:
         gamma: 0.99
         strength: 1.0
 
-    max_steps: 3000000 
+    max_steps: 5000000
     time_horizon: 128
     summary_freq: 10000
