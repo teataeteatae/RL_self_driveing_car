@@ -1,0 +1,38 @@
+{
+    "CarBrain": {
+        "checkpoints": [
+            {
+                "steps": 499906,
+                "file_path": "results\\CarRun11\\CarBrain\\CarBrain-499906.onnx",
+                "reward": 31.254342977205912,
+                "creation_time": 1764087716.450361,
+                "auxillary_file_paths": [
+                    "results\\CarRun11\\CarBrain\\CarBrain-499906.pt"
+                ]
+            },
+            {
+                "steps": 993867,
+                "file_path": "results\\CarRun11\\CarBrain\\CarBrain-993867.onnx",
+                "reward": 32.986578786915,
+                "creation_time": 1764087881.172622,
+                "auxillary_file_paths": [
+                    "results\\CarRun11\\CarBrain\\CarBrain-993867.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 993867,
+            "file_path": "results\\CarRun11\\CarBrain.onnx",
+            "reward": 32.986578786915,
+            "creation_time": 1764087881.172622,
+            "auxillary_file_paths": [
+                "results\\CarRun11\\CarBrain\\CarBrain-993867.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.2.0.dev0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

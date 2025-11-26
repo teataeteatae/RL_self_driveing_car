@@ -1,0 +1,56 @@
+{
+    "CarBrain": {
+        "checkpoints": [
+            {
+                "steps": 499946,
+                "file_path": "results\\CarRun1\\CarBrain\\CarBrain-499946.onnx",
+                "reward": 67.3913990855217,
+                "creation_time": 1764078960.5685887,
+                "auxillary_file_paths": [
+                    "results\\CarRun1\\CarBrain\\CarBrain-499946.pt"
+                ]
+            },
+            {
+                "steps": 999961,
+                "file_path": "results\\CarRun1\\CarBrain\\CarBrain-999961.onnx",
+                "reward": 107.88765357832114,
+                "creation_time": 1764079131.799604,
+                "auxillary_file_paths": [
+                    "results\\CarRun1\\CarBrain\\CarBrain-999961.pt"
+                ]
+            },
+            {
+                "steps": 1499990,
+                "file_path": "results\\CarRun1\\CarBrain\\CarBrain-1499990.onnx",
+                "reward": 84.87472164205143,
+                "creation_time": 1764079305.9923038,
+                "auxillary_file_paths": [
+                    "results\\CarRun1\\CarBrain\\CarBrain-1499990.pt"
+                ]
+            },
+            {
+                "steps": 1682681,
+                "file_path": "results\\CarRun1\\CarBrain\\CarBrain-1682681.onnx",
+                "reward": null,
+                "creation_time": 1764079373.7386181,
+                "auxillary_file_paths": [
+                    "results\\CarRun1\\CarBrain\\CarBrain-1682681.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1682681,
+            "file_path": "results\\CarRun1\\CarBrain.onnx",
+            "reward": null,
+            "creation_time": 1764079373.7386181,
+            "auxillary_file_paths": [
+                "results\\CarRun1\\CarBrain\\CarBrain-1682681.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.2.0.dev0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

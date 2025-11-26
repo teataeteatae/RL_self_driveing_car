@@ -1,0 +1,42 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1764080839",
+        "python_version": "3.10.12 | packaged by Anaconda, Inc. | (main, Jul  5 2023, 19:01:18) [MSC v.1916 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\ProgramData\\anaconda3\\envs\\mlagents\\Scripts\\mlagents-learn D:\\Unity\\Auto_pilot\\config\\car_config.yaml --run-id=CarRun2 --train",
+        "mlagents_version": "1.2.0.dev0",
+        "mlagents_envs_version": "1.2.0.dev0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "2.2.2+cu121",
+        "numpy_version": "1.23.5",
+        "end_time_seconds": "1764080910"
+    },
+    "total": 70.88091230002465,
+    "count": 1,
+    "self": 0.006670200091321021,
+    "children": {
+        "run_training.setup": {
+            "total": 0.07357169996248558,
+            "count": 1,
+            "self": 0.07357169996248558
+        },
+        "TrainerController.start_learning": {
+            "total": 70.80067039997084,
+            "count": 1,
+            "self": 0.00013200001558288932,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 70.80051749997074,
+                    "count": 1,
+                    "self": 70.80051749997074
+                },
+                "TrainerController._save_models": {
+                    "total": 2.0899984519928694e-05,
+                    "count": 1,
+                    "self": 2.0899984519928694e-05
+                }
+            }
+        }
+    }
+}

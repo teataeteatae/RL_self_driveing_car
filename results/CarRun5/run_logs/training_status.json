@@ -1,0 +1,56 @@
+{
+    "CarBrain": {
+        "checkpoints": [
+            {
+                "steps": 499995,
+                "file_path": "results\\CarRun5\\CarBrain\\CarBrain-499995.onnx",
+                "reward": 149.1546185016632,
+                "creation_time": 1764081523.3043356,
+                "auxillary_file_paths": [
+                    "results\\CarRun5\\CarBrain\\CarBrain-499995.pt"
+                ]
+            },
+            {
+                "steps": 999983,
+                "file_path": "results\\CarRun5\\CarBrain\\CarBrain-999983.onnx",
+                "reward": 103.47373238702615,
+                "creation_time": 1764081680.0938442,
+                "auxillary_file_paths": [
+                    "results\\CarRun5\\CarBrain\\CarBrain-999983.pt"
+                ]
+            },
+            {
+                "steps": 1499913,
+                "file_path": "results\\CarRun5\\CarBrain\\CarBrain-1499913.onnx",
+                "reward": 131.0286437107457,
+                "creation_time": 1764081834.4585826,
+                "auxillary_file_paths": [
+                    "results\\CarRun5\\CarBrain\\CarBrain-1499913.pt"
+                ]
+            },
+            {
+                "steps": 1559155,
+                "file_path": "results\\CarRun5\\CarBrain\\CarBrain-1559155.onnx",
+                "reward": 96.55155279114842,
+                "creation_time": 1764081851.3161802,
+                "auxillary_file_paths": [
+                    "results\\CarRun5\\CarBrain\\CarBrain-1559155.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1559155,
+            "file_path": "results\\CarRun5\\CarBrain.onnx",
+            "reward": 96.55155279114842,
+            "creation_time": 1764081851.3161802,
+            "auxillary_file_paths": [
+                "results\\CarRun5\\CarBrain\\CarBrain-1559155.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.2.0.dev0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

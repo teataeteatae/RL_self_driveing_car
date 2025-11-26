@@ -1,0 +1,47 @@
+{
+    "CarBrain": {
+        "checkpoints": [
+            {
+                "steps": 499994,
+                "file_path": "results\\CarRun16\\CarBrain\\CarBrain-499994.onnx",
+                "reward": 69.87138891220093,
+                "creation_time": 1764140435.696015,
+                "auxillary_file_paths": [
+                    "results\\CarRun16\\CarBrain\\CarBrain-499994.pt"
+                ]
+            },
+            {
+                "steps": 999945,
+                "file_path": "results\\CarRun16\\CarBrain\\CarBrain-999945.onnx",
+                "reward": 50.88684588212233,
+                "creation_time": 1764140604.3337078,
+                "auxillary_file_paths": [
+                    "results\\CarRun16\\CarBrain\\CarBrain-999945.pt"
+                ]
+            },
+            {
+                "steps": 1230918,
+                "file_path": "results\\CarRun16\\CarBrain\\CarBrain-1230918.onnx",
+                "reward": null,
+                "creation_time": 1764140683.5588794,
+                "auxillary_file_paths": [
+                    "results\\CarRun16\\CarBrain\\CarBrain-1230918.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1230918,
+            "file_path": "results\\CarRun16\\CarBrain.onnx",
+            "reward": null,
+            "creation_time": 1764140683.5588794,
+            "auxillary_file_paths": [
+                "results\\CarRun16\\CarBrain\\CarBrain-1230918.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.2.0.dev0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

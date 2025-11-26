@@ -162,7 +162,7 @@ public class CarAgent : Agent
         }
 
         // 4) 역주행(뒤로 가기) 패널티
-        if (forwardSpeed < -0.1f)
+        if (forwardSpeed < -0.5f)
         {
             float normBackward = Mathf.Clamp01(-forwardSpeed / 10f);
             AddReward(backwardPenaltyScale * normBackward); // backwardPenaltyScale는 음수
@@ -172,17 +172,10 @@ public class CarAgent : Agent
     // 🔻 충돌 처리 (한 번만 정의!)
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.CompareTag("RightLine"))
+        if (collision.collider.CompareTag("SideLine"))
         {
             AddReward(-0.5f);
-            // 필요하면 EndEpisode(); 추가
-            return;
-        }
-
-        if (collision.collider.CompareTag("CenterLine"))
-        {
-            AddReward(-0.3f);
-            // 필요하면 EndEpisode(); 추가
+            //EndEpisode();
             return;
         }
     }
@@ -191,7 +184,7 @@ public class CarAgent : Agent
     // Collider_Center 태그 가진 트리거 안에 있을 때 매 스텝마다 +리워드
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Collider_Center"))
+        if (other.CompareTag("CarCenter"))
         {
             // 중앙에 잘 붙어서 달릴수록 이득
             AddReward(0.005f);

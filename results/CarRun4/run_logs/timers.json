@@ -1,0 +1,94 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1764081055",
+        "python_version": "3.10.12 | packaged by Anaconda, Inc. | (main, Jul  5 2023, 19:01:18) [MSC v.1916 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\ProgramData\\anaconda3\\envs\\mlagents\\Scripts\\mlagents-learn D:\\Unity\\Auto_pilot\\config\\car_config.yaml --run-id=CarRun4 --train",
+        "mlagents_version": "1.2.0.dev0",
+        "mlagents_envs_version": "1.2.0.dev0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "2.2.2+cu121",
+        "numpy_version": "1.23.5",
+        "end_time_seconds": "1764081130"
+    },
+    "total": 75.39835679996759,
+    "count": 1,
+    "self": 0.004128199943806976,
+    "children": {
+        "run_training.setup": {
+            "total": 0.07170720002613962,
+            "count": 1,
+            "self": 0.07170720002613962
+        },
+        "TrainerController.start_learning": {
+            "total": 75.32252139999764,
+            "count": 1,
+            "self": 0.7769205999793485,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 74.54388890002156,
+                    "count": 1,
+                    "self": 6.864994900068268,
+                    "children": {
+                        "demo_to_buffer": {
+                            "total": 67.67889399995329,
+                            "count": 1,
+                            "self": 2.8199923690408468e-05,
+                            "children": {
+                                "load_demonstration": {
+                                    "total": 1.716013600002043,
+                                    "count": 1,
+                                    "self": 1.6960823999834247,
+                                    "children": {
+                                        "read_file": {
+                                            "total": 0.019931200018618256,
+                                            "count": 36,
+                                            "self": 0.019931200018618256
+                                        }
+                                    }
+                                },
+                                "make_demo_buffer": {
+                                    "total": 65.96285220002756,
+                                    "count": 1,
+                                    "self": 16.562363686331082,
+                                    "children": {
+                                        "steps_from_proto": {
+                                            "total": 49.40048851369647,
+                                            "count": 1372288,
+                                            "self": 31.250263133610133,
+                                            "children": {
+                                                "_process_rank_one_or_two_observation": {
+                                                    "total": 18.15022538008634,
+                                                    "count": 2744575,
+                                                    "self": 18.15022538008634
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "trainer_threads": {
+                    "total": 7.00005330145359e-07,
+                    "count": 1,
+                    "self": 7.00005330145359e-07
+                },
+                "TrainerController._save_models": {
+                    "total": 0.0017111999914050102,
+                    "count": 1,
+                    "self": 0.00016709999181330204,
+                    "children": {
+                        "RLTrainer._checkpoint": {
+                            "total": 0.0015440999995917082,
+                            "count": 1,
+                            "self": 0.0015440999995917082
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
