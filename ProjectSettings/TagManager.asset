@@ -9,6 +9,8 @@ TagManager:
   - LeftLine
   - CarCenter
   - SideLine
+  - checkpoint
+  - Obstacle
   layers:
   - Default
   - TransparentFX

@@ -10,15 +10,18 @@ public class CarAgent : Agent
     public Transform spawnPoint;
     public Transform trackCenter;
 
+    public ObstacleSpawner obstacleSpawner;   // 🔥 장애물 스포너 (Inspector에서 Cararea 드래그)
+
     private Rigidbody rb;
 
-    // 연석/중앙선/역주행 패널티 세기
     [Header("Rewards / Penalties")]
-    public float backwardPenaltyScale = -0.002f; // 역주행 속도 * 이 값
+    public float backwardPenaltyScale = -0.002f;
 
-    // 너무 오래 안 움직이는 경우 처리
     private int idleSteps = 0;
-    public int maxIdleSteps = 80;   // 이만큼 연속으로 느리면 에피소드 종료
+    public int maxIdleSteps = 400;
+
+    private int collisionCount = 0;
+    public int maxCollisionCount = 10;
 
     public override void Initialize()
     {
@@ -33,7 +36,7 @@ public class CarAgent : Agent
     {
         if (car == null || rb == null) return;
 
-        // --- Reset position & rotation ---
+        // --- 위치/회전 리셋 ---
         if (spawnPoint != null)
         {
             car.transform.position = spawnPoint.position;
@@ -45,34 +48,40 @@ public class CarAgent : Agent
             car.transform.localRotation = Quaternion.identity;
         }
 
-        // --- Reset rigidbody ---
+        // --- 물리 리셋 ---
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        // --- Reset Prometeo ---
+        // --- 차량 제어 상태 리셋 ---
         car.ThrottleOff();
         car.ResetSteeringAngle();
         car.RecoverTraction();
 
-        // 멈춤 스텝 카운터 리셋
         idleSteps = 0;
+        collisionCount = 0;
+
+        // 🔥 장애물 리셋
+        if (obstacleSpawner != null)
+        {
+            obstacleSpawner.ResetObstacles(car.transform);
+        }
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
         if (car == null || rb == null)
         {
-            sensor.AddObservation(0f);            // speed
-            sensor.AddObservation(0f);            // dist
-            sensor.AddObservation(Vector3.zero);  // forward
-            sensor.AddObservation(0f);            // y
+            sensor.AddObservation(0f);
+            sensor.AddObservation(0f);
+            sensor.AddObservation(Vector3.zero);
+            sensor.AddObservation(0f);
             return;
         }
 
-        // 1) speed normalized
+        // 1) 속도
         sensor.AddObservation(rb.velocity.magnitude / 20f);
 
-        // 2) distance from track center
+        // 2) 트랙 중앙과의 거리
         if (trackCenter != null)
         {
             float dist = Vector3.Distance(car.transform.position, trackCenter.position);
@@ -83,10 +92,10 @@ public class CarAgent : Agent
             sensor.AddObservation(0f);
         }
 
-        // 3) forward direction (3 floats)
+        // 3) 전방 방향
         sensor.AddObservation(car.transform.forward);
 
-        // 4) y position (for 안정성)
+        // 4) Y 위치
         sensor.AddObservation(car.transform.position.y);
     }
 
@@ -97,11 +106,7 @@ public class CarAgent : Agent
         float steer = Mathf.Clamp(actions.ContinuousActions[0], -1f, 1f);
         float throttle = Mathf.Clamp(actions.ContinuousActions[1], -1f, 1f);
 
-        // =============================
-        // 🔸 액션 → 차 조작
-        // =============================
-
-        // Steering
+        // --- 조향 ---
         if (steer > 0.1f)
             car.TurnRight();
         else if (steer < -0.1f)
@@ -109,7 +114,7 @@ public class CarAgent : Agent
         else
             car.ResetSteeringAngle();
 
-        // Throttle / Reverse
+        // --- 가속 / 후진 ---
         if (throttle > 0.1f)
             car.GoForward();
         else if (throttle < -0.1f)
@@ -117,35 +122,31 @@ public class CarAgent : Agent
         else
             car.ThrottleOff();
 
-        // =============================
-        // 🔹 보상 설계
-        // =============================
-
         float forwardSpeed = Vector3.Dot(rb.velocity, car.transform.forward);
         float speedMag = rb.velocity.magnitude;
 
-        // 0) 매 스텝 시간 패널티 (괜히 오래 버티는 전략 방지)
+        // 0) 시간 패널티
         AddReward(-0.0005f);
 
-        // 1) 앞으로 가면 +보상 (정면 진행 성분 기준)
+        // 1) 전진 보상
         float normForward = Mathf.Clamp01(forwardSpeed / 10f);
-        AddReward(0.2f * normForward);
+        AddReward(0.5f * normForward);
 
-        // 2) 도로 중심에 가까울수록 + 보상
+        // 2) 중앙 유지 보상
         if (trackCenter != null)
         {
             float dist = Vector3.Distance(car.transform.position, trackCenter.position);
             if (dist < 2.0f)
             {
-                float centerReward = 1f - (dist / 2f); // 0 ~ 1
+                float centerReward = 1f - (dist / 2f);
                 AddReward(0.002f * centerReward);
             }
         }
 
-        // 3) 너무 느리면 패널티 + idle 처리
-        if (speedMag < 0.5f)
+        // 3) 너무 느릴 때 패널티 + idle 증가
+        if (speedMag < 0.2f)
         {
-            AddReward(-0.002f); // 가만히 있으면 손해
+            AddReward(-0.002f);
             idleSteps++;
         }
         else
@@ -153,7 +154,7 @@ public class CarAgent : Agent
             idleSteps = 0;
         }
 
-        // 너무 오래 안 움직이면 강제 종료
+        // idle 한계 넘으면 에피소드 종료
         if (idleSteps > maxIdleSteps)
         {
             AddReward(-0.5f);
@@ -161,40 +162,34 @@ public class CarAgent : Agent
             return;
         }
 
-        // 4) 역주행(뒤로 가기) 패널티
+        // 역주행 패널티
         if (forwardSpeed < -0.5f)
         {
             float normBackward = Mathf.Clamp01(-forwardSpeed / 10f);
-            AddReward(backwardPenaltyScale * normBackward); // backwardPenaltyScale는 음수
+            AddReward(backwardPenaltyScale * normBackward);
         }
     }
 
-    // 🔻 충돌 처리 (한 번만 정의!)
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.CompareTag("SideLine"))
         {
-            AddReward(-0.5f);
-            //EndEpisode();
-            return;
+            AddReward(-0.2f);
         }
     }
 
-    // 🔻 중앙 콜라이더 트리거 리워드
-    // Collider_Center 태그 가진 트리거 안에 있을 때 매 스텝마다 +리워드
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("CarCenter"))
         {
-            // 중앙에 잘 붙어서 달릴수록 이득
-            AddReward(0.005f);
+            AddReward(0.05f);
         }
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         var ca = actionsOut.ContinuousActions;
-        ca[0] = Input.GetAxis("Horizontal");
-        ca[1] = Input.GetAxis("Vertical");
+        ca[0] = Input.GetAxis("Horizontal"); // 좌우
+        ca[1] = Input.GetAxis("Vertical");   // 전후
     }
 }
