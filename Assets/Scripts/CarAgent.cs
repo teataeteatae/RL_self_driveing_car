@@ -10,12 +10,15 @@ public class CarAgent : Agent
     public Transform spawnPoint;
     public Transform trackCenter;
 
-    public ObstacleSpawner obstacleSpawner;   // 🔥 장애물 스포너 (Inspector에서 Cararea 드래그)
+    [Header("Obstacle")]
+    public ObstacleManager ObstacleManager;   // 🔥 Inspector에서 ObstacleSpawner 달린 오브젝트 드래그
 
     private Rigidbody rb;
 
     [Header("Rewards / Penalties")]
     public float backwardPenaltyScale = -0.002f;
+    public float obstacleHitPenalty = -1.0f;      // 🔥 장애물 충돌 패널티
+    public float obstaclePassReward = 0.5f;       // 🔥 장애물 성공적으로 피했을 때 보상
 
     private int idleSteps = 0;
     public int maxIdleSteps = 400;
@@ -60,10 +63,10 @@ public class CarAgent : Agent
         idleSteps = 0;
         collisionCount = 0;
 
-        // 🔥 장애물 리셋
-        if (obstacleSpawner != null)
+        // 🔥 장애물 리셋 (에피소드마다 새로 스폰)
+        if (ObstacleManager != null)
         {
-            obstacleSpawner.ResetObstacles(car.transform);
+            ObstacleManager.ResetObstacles();
         }
     }
 
@@ -172,6 +175,15 @@ public class CarAgent : Agent
 
     private void OnCollisionEnter(Collision collision)
     {
+        // 🔥 장애물 충돌: 큰 음수 보상 + 에피소드 종료
+        if (collision.collider.CompareTag("Obstacle"))
+        {
+            AddReward(obstacleHitPenalty);   // 기본 -1.0f
+            EndEpisode();
+            return;
+        }
+
+        // 기존 사이드라인 충돌 패널티
         if (collision.collider.CompareTag("SideLine"))
         {
             AddReward(-0.2f);
@@ -180,9 +192,16 @@ public class CarAgent : Agent
 
     private void OnTriggerEnter(Collider other)
     {
+        // 트랙 중앙선 통과
         if (other.CompareTag("CarCenter"))
         {
             AddReward(0.05f);
+        }
+
+        // 🔥 장애물 뒤쪽 트리거 통과 (성공적으로 피함)
+        if (other.CompareTag("ObstaclePassed"))
+        {
+            AddReward(obstaclePassReward);  // 기본 +0.5f
         }
     }
 
