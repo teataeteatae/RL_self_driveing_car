@@ -1,0 +1,41 @@
+behaviors:
+  CarBrain:
+    trainer_type: ppo
+
+    hyperparameters:
+      # 🔻 이미지는 메모리를 많이 먹으므로 배치를 줄입니다.
+      batch_size: 256
+      # buffer_size는 batch_size의 약 20~40배 권장
+      buffer_size: 10240
+      learning_rate: 3.0e-4   # 학습률을 표준값으로 약간 올림
+      beta: 5.0e-3
+      epsilon: 0.2
+      lambd: 0.95
+      num_epoch: 3
+      learning_rate_schedule: linear
+
+    network_settings:
+      normalize: false        # 이미지는 내부적으로 처리되므로 false 권장 (true도 상관없음)
+      hidden_units: 256       # CNN 뒤에 붙는 레이어 크기, 256~512 좋음
+      num_layers: 2
+      vis_encode_type: simple # 🔥 필수: CNN 활성화
+
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+      
+      # 🔻 모방 학습 설정
+      gail:                   # GAIL(Generative Adversarial Imitation Learning)을 추가하면 더 사람처럼 운전함
+        strength: 0.1
+        demo_path: results/Demo # 데모 파일 경로 확인 필수!
+        
+      behavioral_cloning:
+        strength: 0.5         # 초반엔 사람 운전을 50% 비중으로 따라함
+        steps: 200000         # 10만 스텝 동안 집중적으로 모방
+        demo_path: results/Demo
+        batch_size: 64        # 모방 학습용 배치 사이즈는 더 작게
+
+    max_steps: 2000000
+    time_horizon: 64          # 이미지는 64가 반응성이 더 좋을 수 있음
+    summary_freq: 10000
